@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheet Music Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 400px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        input[type="checkbox"] {
+            margin-bottom: 10px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        img {
+            max-width: 1000px;
+            max-height: 580px;
+            margin-bottom: 80px;
+        }
+        h4 {
+            color: darkred;
+        }
+
+        audio {
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sheet Music Generator</h1>
+    {% if image %}
+        <img src="{{ url_for('static', filename=image) }}" alt="Generated Image">
+        <audio controls>
+            <source src="{{ url_for('static', filename=audio) }}" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    {% endif %}
+    {% if err %}
+        <h4>Error: {{ err }}</h4>
+    {% endif %}
+    <form method="post">
+        <br>
+        <label for="strtest">Chord Sequence:</label>
+        <input type="text" id="strtest" name="strtest" placeholder="C A7 | D- G7"><br><br>
+        <label style="display: inline-block" for="twelvetone">Twelve Tone (overrides chord sequence and scale/chord options):</label>
+        <input style="display: inline-block" type="checkbox" id="twelvetone" name="twelvetone" {% if twelvetone %}checked{% endif %}><br><br>
+        <label style="display: inline-block" for="usescale">Use Only Chord Tones:</label>
+        <input style="display: inline-block" type="checkbox" id="usescale" name="usescale" {% if not usescale %}checked{% endif %}><br><br>
+        <label style="display: inline-block" for="usescale">Use Only Quarter Notes:</label>
+        <input style="display: inline-block" type="checkbox" id="quarteronly" name="quarteronly" {% if quarteronly %}checked{% endif %}><br><br>
+        <label style="display: inline-block" for="repeat">Repeat:</label>
+        <input style="display: inline-block" type="number" id="repeat" name="repeat" min="1" value="1"><br><br>
+        <button type="submit">Generate</button>
+    </form>
+</body>
+</html>
