@@ -2,6 +2,7 @@
 *.musicxml
 *.mid
 test.py
+static/* 
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
