@@ -7,7 +7,9 @@ Generate melodies from chords.
 
 ## setup
 
-uses `Python 3.12.4`
+install `Python 3.12.4`, `MuseScore 4`
+
+make sure your desired soundfont is located in `/usr/share/soundfonts/default.sf2`
 
 install requirements with 
 
