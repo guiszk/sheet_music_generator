@@ -7,12 +7,12 @@ import uuid
 from makeprog import makeprog
 
 app = Flask(__name__)
-fluidsynth = FluidSynth()
+fluidsynth = FluidSynth('upright.sf2')
 
 
 us = environment.UserSettings()
-us['musicxmlPath'] = '/usr/bin/mscore'
-us['musescoreDirectPNGPath'] = '/usr/bin/mscore'
+us['musicxmlPath'] = './mscore'
+us['musescoreDirectPNGPath'] = './mscore'
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
