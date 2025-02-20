@@ -4,69 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sheet Music Generator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        form {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        input[type="text"] {
-            width: 400px;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        input[type="number"] {
-            width: 100px;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        input[type="checkbox"] {
-            margin-bottom: 10px;
-        }
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        button[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        img {
-            max-width: 1000px;
-            max-height: 580px;
-            margin-bottom: 80px;
-        }
-        h4 {
-            color: darkred;
-        }
-
-        audio {
-            border-radius: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Sheet Music Generator</h1>
+    <a href="/">
+        <h1>Sheet Music Generator</h1>
+    </a>
+    
     {% if image %}
         <img src="{{ url_for('static', filename=image) }}" alt="Generated Image">
         <audio controls>
@@ -80,21 +24,93 @@
     <form method="post">
         <br>
         <label for="strtest">Chord Sequence:</label>
-        <input type="text" id="strtest" name="strtest" placeholder="C A7 | D- G7"><br><br>
-        <label style="display: inline-block" for="twelvetone">Twelve Tone (overrides chord sequence and scale/chord options):</label>
-        <input style="display: inline-block" type="checkbox" id="twelvetone" name="twelvetone" {% if twelvetone %}checked{% endif %}><br><br>
-        <label style="display: inline-block" for="usescale">Auto Generate Chord Progression:</label>
-        <input style="display: inline-block" type="checkbox" id="randchords" name="randchords" {% if randchords %}checked{% endif %}><br><br>
-        <label style="display: inline-block" for="numbars">Song length:</label>
-        <input style="display: inline-block" type="number" id="numbars" name="numbars" min="1" value="1"><br><br>
-        <label style="display: inline-block" for="usescale">Use Only Chord Tones:</label>
-        <input style="display: inline-block" type="checkbox" id="usescale" name="usescale" {% if not usescale %}checked{% endif %}><br><br>
-        <label style="display: inline-block" for="usescale">Use Only Quarter Notes:</label>
-        <input style="display: inline-block" type="checkbox" id="quarteronly" name="quarteronly" {% if quarteronly %}checked{% endif %}><br><br>
-        <label style="display: inline-block" for="repeat">Repeat:</label>
-        <input style="display: inline-block" type="number" id="repeat" name="repeat" min="1" value="1"><br><br>
+        <input type="text" id="strtest" name="strtest" placeholder="C A7 | D- G7" required><br><br>
+        <label for="twelvetone">Twelve Tone (ignores chords and tonality):</label>
+        <input type="checkbox" id="twelvetone" name="twelvetone" {% if twelvetone %}checked{% endif %}><br><br>
+        <label for="usescale">Auto Generate Chord Progression:</label>
+        <input type="checkbox" id="randchords" name="randchords" {% if randchords %}checked{% endif %}><br><br>
+        <div id="lengthdiv">
+            <label for="numbars">Song length (in bars):</label>
+            <input type="number" id="numbars" name="numbars" min="1" max="64" value="8"><br><br>
+        </div>
+        <label for="usescale">Use Only Chord Tones:</label>
+        <input type="checkbox" id="usescale" name="usescale" {% if not usescale %}checked{% endif %}><br><br>
+        <label for="usescale">Use Only Quarter Notes:</label>
+        <input type="checkbox" id="quarteronly" name="quarteronly" {% if quarteronly %}checked{% endif %}><br><br>
+        <label for="repeat">Repeat:</label>
+        <input title="How many times to repeat the same sequence" type="number" id="repeat" name="repeat" min="1" max="8" value="1"><br><br>
+        <b class="aboutp">▸ About</b><br><br>
+        <div class="about">
+            <b>Web app to generate melodies from chords.</b><br><br>
+            <b>Scales used:</b>
+            <p>Major chords: ionian</p>
+            <p>Minor chords: dorian</p>
+            <p>Sus chords: ionian, no 3rd</p>
+            <p>7th chords: mixolydian</p>
+            <p>Alt chords: altered (chromatic scale except for 4th and 7th degrees)</p>
+            <p>Dim chords: whole-half</p>
+            <p>Half-dim chords: whole-half (starting a semitone above)</p>
+            <b>Chord extensions supported by music21:</b>
+            <p>M, maj, m, min, +, aug, dim, o, 7, dom7, maj7, M7, mM7, m#7, minmaj7, m7,</p>
+            <p>min7, +M7, augmaj7, 7+, +7, aug7, ø7, m7b5, o7, dim7, dom7dim5, 6, m6,</p>
+            <p>min6, M9, Maj9, 9, dom9, mM9, minmaj9, m9, min9, +M9, augmaj9, 9#5, +9,</p> 
+            <p>aug9, ø9, øb9, o9, dim9, ob9, dimb9, 11, dom11, M11, Maj11, mM11,</p> 
+            <p>minmaj11, m11, min11, +M11, augmaj11, +11, aug11, ø11, o11, dim11, M13,</p> 
+            <p>Maj13, 13, dom13, mM13, minmaj13, m13, min13, +M13, augmaj13, +13,</p> 
+            <p>aug13, ø13, sus2, sus, sus4, 7sus, 7sus4, N6, It+6, It, Fr+6, Fr, Gr+6, Ger,</p> 
+            <p>pedal, power, tristan</p>
+            <b>Example chord sequence:</b>
+            <p>Em7 F7 | BbM7 Db7 | GbM7 A7 | DM7 |</p>
+            <p>Dm7 Eb7 | AbM7 B7 | EM7 G7 | CM7 |</p>
+            <p>Cm7 Db7 | GbM7 A7 | DM7 F7 | BbM7 |</p>
+            <p>Em7 | F7 | BbM7 | Eb7 |</p>
+        </div>
         <button type="submit">Generate</button>
     </form>
+    <div class="file-download">
+        <a href="/download/result.musicxml" download="result.musicxml">
+            <button class="button-left">Download .musicxml</button>
+        </a>
+        <a href="/download/resultmidi.mid" download="result.mid">
+            <button class="button-right">Download .mid</button>
+        </a>
+    </div>
+
     <a href="https://github.com/guiszk/sheet_music_generator" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+    <script>
+        document.getElementById('twelvetone').addEventListener('click', toggleLength);
+        document.getElementById('randchords').addEventListener('click', toggleLength);
+
+        function toggleLength() {
+            if (document.getElementById('twelvetone').checked || document.getElementById('randchords').checked) {
+                document.getElementById('lengthdiv').style.display = 'block';
+                document.getElementById('strtest').required = false;
+            } else {
+                document.getElementById('lengthdiv').style.display = 'none';
+                document.getElementById('strtest').required = true;
+            }
+        }
+
+        if(document.images.length == 0) {
+            document.getElementsByClassName("file-download")[0].style.display = "none";
+        }
+
+        document.getElementsByClassName("aboutp")[0].addEventListener('click', function() {
+            var aboutDiv = document.getElementsByClassName("about")[0];
+            var aboutText = document.getElementsByClassName("aboutp")[0];
+            
+            var currentDisplay = window.getComputedStyle(aboutDiv).display;
+
+            if (currentDisplay === "none") {
+            aboutDiv.style.display = "block"; 
+            aboutText.textContent = "▾ About"; 
+            } else {
+            aboutDiv.style.display = "none"; 
+            aboutText.textContent = "▸ About"; 
+            }
+        });
+    </script>
+
 </body>
 </html>

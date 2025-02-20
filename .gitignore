@@ -3,6 +3,7 @@
 *.mid
 test.py
 static/* 
+result*.png
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

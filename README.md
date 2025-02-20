@@ -1,4 +1,3 @@
-
 # Sheet Music Generator
 
 Generate melodies from chords.
