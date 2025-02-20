@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, send_file, send_from_directory
-from music21 import *
+from music21 import pitch, scale, stream, clef, harmony, note, environment
 import os
 from random import choice
 from midi2audio import FluidSynth
