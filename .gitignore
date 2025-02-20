@@ -2,7 +2,8 @@
 *.musicxml
 *.mid
 test.py
-static/* 
+static/*.wav
+static/*.png
 result*.png
 
 # Byte-compiled / optimized / DLL files
